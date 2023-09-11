@@ -54,7 +54,7 @@ public abstract class AbstractQuery<T, Children extends AbstractQuery<T, Childre
     public Children group(List<String> columns) {
         if (CollUtil.isEmpty(columns)) return this.typedThis;
         for (int i = 0; i < columns.size(); i++) {
-            columns.set(i,Identifier.COLUMN + columns.get(i));
+            columns.set(i, Identifier.COLUMN + columns.get(i));
         }
         StringBuilder s = ListToString(columns);
         sqlSegment.getLastSql().add(String.format("group(columns: [%s])", s));
@@ -106,7 +106,7 @@ public abstract class AbstractQuery<T, Children extends AbstractQuery<T, Childre
         if (StrUtil.isEmpty(column)) {
             sql = "";
         } else {
-            column = Identifier.COLUMN+column;
+            column = Identifier.COLUMN + column;
             sql = String.format("column: \"%s\"", column);
         }
         sqlSegment.getLastSql().add(String.format("count(%s)", sql));
@@ -120,19 +120,19 @@ public abstract class AbstractQuery<T, Children extends AbstractQuery<T, Childre
 
     @Override
     public String getSql() {
-        if (StrUtil.isNotEmpty(this.bucket)){
+        if (StrUtil.isNotEmpty(this.bucket)) {
             this.from(this.bucket);
         }
-        if (StrUtil.isNotEmpty(this.measurement)){
-            this.sqlSegment.getLastSql().add(0,String.format("filter(fn: (r) => r._measurement == \"%s\")", this.measurement));
+        if (StrUtil.isNotEmpty(this.measurement)) {
+            this.sqlSegment.getLastSql().add(0, String.format("filter(fn: (r) => r._measurement == \"%s\")", this.measurement));
         }
         String sql = sqlSegment.getSql();
-        if (this.entityInfoMap!=null){
+        if (this.entityInfoMap != null) {
             for (Map.Entry<String, Column> entry : this.entityInfoMap.entrySet()) {
-                sql = sql.replace(entry.getKey(),entry.getValue().name());
+                sql = sql.replace(entry.getKey(), entry.getValue().name());
             }
-        }else {
-            sql = sql.replace(Identifier.COLUMN,"");
+        } else {
+            sql = sql.replace(Identifier.COLUMN, "");
         }
         return sql;
     }
