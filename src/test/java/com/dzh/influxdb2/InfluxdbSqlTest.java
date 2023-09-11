@@ -2,6 +2,8 @@ package com.dzh.influxdb2;
 
 import com.dzh.influxdb2.core.sqlBuild.func.Filter;
 import com.dzh.influxdb2.core.sqlBuild.LambdaQuery;
+import com.dzh.influxdb2.ready.QuotaAllInfo;
+import com.dzh.influxdb2.ready.QuotaCount;
 import com.dzh.influxdb2.ready.QuotaInfo;
 import com.dzh.influxdb2.ready.QuotaInfoInfluxRepository;
 import org.junit.jupiter.api.Test;
@@ -58,7 +60,8 @@ class InfluxdbSqlTest {
     void find1(){
         LambdaQuery<QuotaInfo> lambdaQuery = new LambdaQuery<>();
         lambdaQuery
-                .range("2023-09-09","2023-09-10")
+                .from("ykk")
+                .range("","")
                 .filter(new Filter<QuotaInfo>()
                         .eq(QuotaInfo::getAlarmName,"温度过低")
                         .and()
@@ -70,7 +73,25 @@ class InfluxdbSqlTest {
                 .sort(true,QuotaInfo::getDeviceId)
                 .limit(10,0)
         ;
-        System.out.println(quotaInfoInfluxRepository.query(lambdaQuery));
+        System.out.println(quotaInfoInfluxRepository.query(lambdaQuery, QuotaAllInfo.class));
+    }
+
+    @Test
+    void find2(){
+        LambdaQuery<QuotaInfo> lambdaQuery = new LambdaQuery<>();
+        lambdaQuery
+                .from("ykk")
+                .range("","")
+                .filter(new Filter<QuotaInfo>()
+                        .eq(QuotaInfo::getAlarmName,"温度过低")
+                        .and()
+                        .eq(QuotaInfo::getDeviceId,"123456")
+                        .and()
+                        .eq(QuotaInfo::getAlarm,"1")
+                )
+                .count(QuotaInfo::getValue)
+        ;
+        System.out.println(quotaInfoInfluxRepository.query(lambdaQuery, QuotaCount.class));
     }
 
 }

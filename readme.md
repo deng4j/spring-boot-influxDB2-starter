@@ -47,7 +47,11 @@ spring:
     bucket: ykk
     url: http://192.168.136.10:8086
     token: iPbdsWbXOXnY5YLNK0VTYXSfcGfk-AdBnbJAIkPU4w30mjCajvuZ0CJI7yvW05J8TFB6XmeLCkxw1b1FmMj8bQ==
+```
 
+```java
+// 开启
+@EnableInfluxDB
 ```
 
 ```java
