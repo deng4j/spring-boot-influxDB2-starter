@@ -1,5 +1,7 @@
 package com.dzh.influxdb2;
 
+import cn.hutool.core.util.StrUtil;
+import com.dzh.influxdb2.core.common.enums.TimeUnit;
 import com.dzh.influxdb2.core.sqlBuild.func.Filter;
 import com.dzh.influxdb2.core.sqlBuild.LambdaQuery;
 import com.dzh.influxdb2.ready.QuotaAllInfo;
@@ -18,16 +20,17 @@ class InfluxdbSqlTest {
     private QuotaInfoInfluxRepository quotaInfoInfluxRepository;
 
     @Test
-    public void testPost(){
+    public void testPost() throws InterruptedException {
         for (int i = 0; i < 20; i++) {
             QuotaInfo quotaInfo=new QuotaInfo();
             quotaInfo.setDeviceId("123456");
             quotaInfo.setQuotaId("1");
             quotaInfo.setQuotaName("温度");
             quotaInfo.setAlarm("1");
-            quotaInfo.setAlarmName("温度过低");
-            quotaInfo.setValue(-1D);
+            quotaInfo.setAlarmName("温度过低"+i);
+            quotaInfo.setValue(-1.8);
             quotaInfoInfluxRepository.write(quotaInfo);
+            Thread.sleep(1000);
         }
     }
 
@@ -44,11 +47,28 @@ class InfluxdbSqlTest {
                         .and()
                         .eq(QuotaInfo::getAlarm,"1")
                 )
+                .window(10, TimeUnit.D)
                 .sort(true,QuotaInfo::getDeviceId)
                 .limit(10,0)
                 .count(QuotaInfo::getValue)
+                .aggregateWindow(3,TimeUnit.D,"count")
                 ;
         System.out.println(lambdaQuery.getSql());
+    }
+
+    @Test
+    void testsql1(){
+        LambdaQuery<QuotaInfo> lambdaQueryByPage = new LambdaQuery<>();
+        lambdaQueryByPage
+                .from("ykk")
+                .range(null,null)
+                .filter(new Filter<QuotaInfo>()
+                        .eq(StrUtil.isNotEmpty("123456"),QuotaInfo::getQuotaId,"123456")
+                )
+                .group(QuotaInfo::getDeviceId,QuotaInfo::getQuotaId)
+                .sort(true,QuotaInfo::getDeviceId)
+                .limit(10,0);
+        System.out.println(lambdaQueryByPage.getSql());
     }
 
     @Test

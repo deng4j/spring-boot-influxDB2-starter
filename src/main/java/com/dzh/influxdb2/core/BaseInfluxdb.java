@@ -1,8 +1,6 @@
 package com.dzh.influxdb2.core;
 
-import com.dzh.influxdb2.core.common.Identifier;
-import com.dzh.influxdb2.core.sqlBuild.AbstractQuery;
-import com.dzh.influxdb2.core.sqlBuild.func.Filter;
+import com.dzh.influxdb2.core.common.instance.Identifier;
 import com.dzh.influxdb2.core.sqlBuild.LambdaQuery;
 import com.dzh.influxdb2.core.sqlBuild.Query;
 import com.influxdb.annotations.Column;

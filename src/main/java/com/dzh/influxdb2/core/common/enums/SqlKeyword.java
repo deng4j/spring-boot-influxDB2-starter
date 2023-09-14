@@ -1,4 +1,4 @@
-package com.dzh.influxdb2.core.common;
+package com.dzh.influxdb2.core.common.enums;
 
 import com.dzh.influxdb2.core.sqlBuild.Isql;
 

@@ -1,4 +1,4 @@
-package com.dzh.influxdb2.core.sqlBuild.domain.express;
+package com.dzh.influxdb2.core.common.domain.express;
 
 /**
  * r._measurement == "cpu" and
@@ -40,6 +40,6 @@ public class Entity implements Express {
 
     @Override
     public String getSql() {
-        return String.format("r.%s %s \"%s\"",fiedName,operator,value);
+        return String.format("%s %s %s",fiedName,operator,value);
     }
 }

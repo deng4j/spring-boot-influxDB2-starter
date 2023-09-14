@@ -1,8 +1,9 @@
 package com.dzh.influxdb2.core.sqlBuild;
 
 import cn.hutool.core.util.StrUtil;
-import com.dzh.influxdb2.core.common.LambdaUtils;
-import com.dzh.influxdb2.core.sqlBuild.func.Compare;
+import com.dzh.influxdb2.core.common.instance.Identifier;
+import com.dzh.influxdb2.utils.LambdaUtils;
+import com.dzh.influxdb2.core.sqlBuild.func.Filter;
 import com.dzh.influxdb2.core.sqlBuild.func.SFunction;
 import org.jetbrains.annotations.NotNull;
 
@@ -11,7 +12,7 @@ import java.util.List;
 
 public class LambdaQuery<T> extends AbstractQuery<T, LambdaQuery<T>> {
 
-    public LambdaQuery<T> filter(Compare fn) {
+    public LambdaQuery<T> filter(Filter<T> fn) {
         String sql = fn.getSql();
         if (StrUtil.isEmpty(sql)) return this;
         super.filter(sql);
@@ -19,14 +20,14 @@ public class LambdaQuery<T> extends AbstractQuery<T, LambdaQuery<T>> {
     }
 
     public LambdaQuery<T> group(SFunction<T>... fs) {
-        List<String> columns = SFsToString(fs);
+        List<String> columns = SFsToStrings(fs);
         super.group(columns);
         return this.typedThis;
     }
 
     public LambdaQuery<T> sort(Boolean desc, SFunction<T>... fs) {
-        List<String> columns = SFsToString(fs);
-        super.sort(columns, desc);
+        List<String> columns = SFsToStrings(fs);
+        super.sort(desc,columns);
         return this.typedThis;
     }
 
@@ -37,7 +38,7 @@ public class LambdaQuery<T> extends AbstractQuery<T, LambdaQuery<T>> {
      * @return
      */
     @NotNull
-    private List<String> SFsToString(SFunction<T>[] fs) {
+    private List<String> SFsToStrings(SFunction<T>[] fs) {
         List<String> columns = new ArrayList<>();
         for (SFunction<T> f : fs) {
             columns.add(LambdaUtils.convertToFieldName(f));

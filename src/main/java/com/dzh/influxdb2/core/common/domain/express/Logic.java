@@ -1,4 +1,4 @@
-package com.dzh.influxdb2.core.sqlBuild.domain.express;
+package com.dzh.influxdb2.core.common.domain.express;
 
 /**
  * 逻辑连接符号 and、or

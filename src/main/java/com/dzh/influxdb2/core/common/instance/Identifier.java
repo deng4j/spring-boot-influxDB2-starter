@@ -1,4 +1,4 @@
-package com.dzh.influxdb2.core.common;
+package com.dzh.influxdb2.core.common.instance;
 
 public class Identifier {
     // 代表是一个列

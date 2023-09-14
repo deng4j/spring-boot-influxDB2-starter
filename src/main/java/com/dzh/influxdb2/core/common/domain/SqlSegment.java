@@ -1,4 +1,4 @@
-package com.dzh.influxdb2.core.sqlBuild.domain;
+package com.dzh.influxdb2.core.common.domain;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;

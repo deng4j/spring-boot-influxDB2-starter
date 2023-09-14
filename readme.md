@@ -1,10 +1,8 @@
 # 一.介绍
 
-本框架是基于spring对influx查询语句的初步封装，类似于mybatis对sql的封装。
+本框架是基于spring对influx查询语句的初步封装，致力于对flux查询语句的快速构建、便捷使用、易读。
 
 influx官网：[Query InfluxDB with Flux | InfluxDB OSS 2.7 Documentation (influxdata.com)](https://docs.influxdata.com/influxdb/v2.7/query-data/get-started/query-influxdb/)
-
-注意：本框架仅初步使用，并未做严格的安全防护，请谨慎使用。
 
 # 二.使用
 
@@ -50,11 +48,6 @@ spring:
 ```
 
 ```java
-// 开启
-@EnableInfluxDB
-```
-
-```java
 @Component
 @Slf4j
 public class QuotaInfoInfluxRepository extends BaseInfluxdb<QuotaInfo> {
@@ -70,9 +63,8 @@ void find1(){
         .range("2023-09-09","2023-09-10")
         .filter(new Filter<QuotaInfo>()
                 .eq(QuotaInfo::getAlarmName,"温度过低")
-                .and()
                 .eq(QuotaInfo::getDeviceId,"123456")
-                .and()
+                .or()
                 .eq(QuotaInfo::getAlarm,"1")
                )
         .group(QuotaInfo::getDeviceId,QuotaInfo::getValue)
